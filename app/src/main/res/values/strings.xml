@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">CatTest</string>
+
+    <string name="tab_text_cats">Cats</string>
+    <string name="tab_text_favorites">Favorites</string>
+
+    <string name="empty_list">Empty</string>
+    <string name="empty_list_favorites">Empty</string>
+    <string name="ok">OK</string>
+    <string name="storage_required">Permission to write to storage is required</string>
+</resources>
