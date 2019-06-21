@@ -22,16 +22,19 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintVertical_bias="0.0"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
+            android:id="@+id/favourites"
             android:src="@drawable/ic_favorite_gray"
-            android:id="@+id/favorites"
+            android:clickable="true"
+            android:focusable="true"
             android:layout_gravity="end"
             android:layout_width="@dimen/spacing_24"
             android:layout_height="@dimen/spacing_24"
-            android:layout_marginEnd="@dimen/activity_vertical_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"/>
+            android:layout_marginEnd="@dimen/spacing_16"
+            android:layout_marginTop="@dimen/spacing_16"
+            android:layout_marginRight="@dimen/spacing_16"/>
 
 </FrameLayout>

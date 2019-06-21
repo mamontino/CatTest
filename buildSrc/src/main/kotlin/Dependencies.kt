@@ -101,9 +101,6 @@ object Libraries {
 	val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
 	val glideCompiler = "com.github.bumptech.glide:compiler:${Versions.glide}"
 
-	// Google
-	val databindingCompiler = "androidx.databinding:databinding-compiler:${Versions.dataBinding}"
-
 	// Arch
 	val roomRuntime = "androidx.room:room-runtime:${Versions.roomVersion}"
 	val roomRx = "androidx.room:room-rxjava2:${Versions.roomVersion}"
@@ -117,8 +114,6 @@ object Libraries {
 
 object SupportLibraries {
 	val appCompat = "androidx.appcompat:appcompat:${Versions.appCompatVersion}"
-	val recyclerView = "androidx.recyclerview:recyclerview:${Versions.recyclerViewVersion}"
-	val supportV4 = "androidx.legacy:legacy-support-v4:${Versions.legacySupportVersion}"
 	val material = "com.google.android.material:material:${Versions.materialVersion}"
 	val constraint = "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
 	val coreUI = "androidx.legacy:legacy-support-core-ui:${Versions.coreUIVersion}"
@@ -130,7 +125,6 @@ object SupportLibraries {
 }
 
 object TestLibraries {
-	val mockito = "org.mockito:mockito-core:${Versions.androidMockito}"
 	val mockitoAndroid = "org.mockito:mockito-android:${Versions.androidMockito}"
 	val junit = "junit:junit:${Versions.junit}"
 	val junitExt = "androidx.test.ext:junit:${Versions.junitExtVersion}"

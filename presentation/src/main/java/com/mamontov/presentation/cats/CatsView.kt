@@ -9,7 +9,7 @@ import com.mamontov.domain.entities.Cat
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface CatsView : MvpView {
 
-    fun updateFavoriteItem(cat: Cat)
+    fun updateFavoriteItem(position: Int, cat: Cat)
 
     fun addCats(cats: List<Cat>)
 

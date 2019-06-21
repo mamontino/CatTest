@@ -4,9 +4,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mamontov.cattest.screens.adapters.holders.ImageViewHolder
 import com.mamontov.domain.entities.Cat
+import timber.log.Timber
 
 class CatsAdapter(
-    private val onFavoriteClickListener: (item: Cat?) -> Unit,
+    private val onFavouriteClickListener: (position: Int, item: Cat?) -> Unit,
     private val onImageClickListener: (item: Cat?) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -23,26 +24,16 @@ class CatsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            CAT_ITEM -> ImageViewHolder(parent, onFavoriteClickListener, onImageClickListener)
-            else                -> throw Exception("Incorrect viewType")
+            CAT_ITEM -> ImageViewHolder(parent, onFavouriteClickListener, onImageClickListener)
+            else -> throw Exception("Incorrect viewType")
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is ImageViewHolder     -> holder.bind(cats[position])
-            else                -> throw Exception("Incorrect viewType")
+            is ImageViewHolder -> holder.bind(cats[position], position)
+            else -> throw Exception("Incorrect viewType")
         }
-    }
-
-    fun add(cat: Cat) {
-        cats.add(cat)
-        notifyItemInserted(itemCount)
-    }
-
-    fun add(position: Int, cat: Cat) {
-        cats.add(position, cat)
-        notifyItemInserted(position)
     }
 
     fun addAll(list: List<Cat>) {
@@ -50,12 +41,10 @@ class CatsAdapter(
         notifyDataSetChanged()
     }
 
-    fun replace(previous: Cat, current: Cat) {
-        val index = cats.indexOf(previous)
-        if (index != INCORRECT_INDEX) {
-            cats[index] = current
-            notifyItemChanged(index)
-        }
+    fun replace(position: Int, cat: Cat) {
+        Timber.e("replace: $position")
+            cats[position] = cat
+            notifyItemChanged(position)
     }
 
     fun remove(item: Cat) {

@@ -5,15 +5,15 @@ import com.mamontov.domain.reposirory.CatsRepository
 import io.reactivex.Completable
 import javax.inject.Inject
 
-interface AddToFavoritesUseCase {
+interface RemoveFromFavouritesUseCase {
 
     operator fun invoke(cat: Cat): Completable
 }
 
-class AddToFavoritesUseCaseImpl @Inject constructor(
+class RemoveFromFavouritesUseCaseImpl @Inject constructor(
     private val catsRepository: CatsRepository
-) : AddToFavoritesUseCase {
+) : RemoveFromFavouritesUseCase {
 
     override fun invoke(cat: Cat): Completable =
-        catsRepository.addToFavorites(cat)
+        catsRepository.removeFromFavorites(cat)
 }

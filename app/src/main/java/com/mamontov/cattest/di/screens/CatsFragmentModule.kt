@@ -17,9 +17,9 @@ interface CatsFragmentModule {
 
     @Binds
     @Reusable
-    fun bindRemoveFromFavoritesUseCase(useCase: RemoveFromFavoritesUseCaseImpl): RemoveFromFavoritesUseCase
+    fun bindRemoveFromFavoritesUseCase(useCase: RemoveFromFavouritesUseCaseImpl): RemoveFromFavouritesUseCase
 
     @Binds
     @Reusable
-    fun bindAddToFavoritesUseCase(useCase: AddToFavoritesUseCaseImpl): AddToFavoritesUseCase
+    fun bindAddToFavoritesUseCase(useCase: AddToFavouritesUseCaseImpl): AddToFavouritesUseCase
 }

@@ -17,4 +17,12 @@ interface FavoritesView : MvpView {
     fun hideLoading()
 
     fun showEmptyCats()
+
+    fun showError(message: String)
+
+    fun checkPermission(cat: Cat)
+
+    fun showMessage(message: String)
+
+    fun updateFavoriteItem(position: Int, cat: Cat)
 }

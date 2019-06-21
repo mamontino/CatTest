@@ -17,5 +17,9 @@ interface FavoritesFragmentModule{
 
     @Binds
     @Reusable
-    fun bindRemoveFromFavoritesUseCase(useCase: RemoveFromFavoritesUseCaseImpl): RemoveFromFavoritesUseCase
+    fun bindRemoveFromFavoritesUseCase(useCase: RemoveFromFavouritesUseCaseImpl): RemoveFromFavouritesUseCase
+
+    @Binds
+    @Reusable
+    fun bindAddFavoritesUseCase(useCase: AddToFavouritesUseCaseImpl): AddToFavouritesUseCase
 }

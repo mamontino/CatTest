@@ -10,19 +10,26 @@ import kotlinx.android.synthetic.main.image_item.view.*
 
 class ImageViewHolder(
     parent: ViewGroup,
-    onFavoriteClickListener: (Cat?) -> Unit,
-    onImageClickListener: (Cat?) -> Unit
+    val onFavouriteClickListener: (Int, Cat?) -> Unit,
+    val onImageClickListener: (Cat?) -> Unit
 ) : RecyclerView.ViewHolder(parent.inflate(R.layout.image_item)) {
 
     private lateinit var item: Cat
 
     init {
-        itemView.favorites.setOnClickListener { onFavoriteClickListener(item) }
         itemView.setOnClickListener { onImageClickListener(item) }
     }
 
-    fun bind(cat: Cat) {
+    fun bind(cat: Cat, position: Int) {
         item = cat
+
+        itemView.favourites.setOnClickListener{onFavouriteClickListener(position, item)}
+
+        if (item.favourite){
+            itemView.favourites.setImageResource(R.drawable.ic_favorite_red)
+        }else{
+            itemView.favourites.setImageResource(R.drawable.ic_favorite_gray)
+        }
 
         itemView.apply {
             Glide

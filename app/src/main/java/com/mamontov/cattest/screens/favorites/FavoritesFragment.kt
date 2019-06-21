@@ -2,6 +2,7 @@ package com.mamontov.cattest.screens.favorites
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -35,7 +36,7 @@ class FavoritesFragment : BaseFragment(), FavoritesView {
 
     private val adapter: CatsAdapter =
         CatsAdapter(
-            { presenter.onFavoritesClicked(it) },
+            { position, cat -> presenter.onFavoritesClicked(position, cat) },
             { presenter.onImageClicked(it) }
         )
 
@@ -77,5 +78,21 @@ class FavoritesFragment : BaseFragment(), FavoritesView {
         catList.visibility = View.GONE
         progress.visibility = View.GONE
         emptyList.visibility = View.VISIBLE
+    }
+
+    override fun showError(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun checkPermission(cat: Cat) {
+        Toast.makeText(requireContext(), cat.url, Toast.LENGTH_LONG).show()
+    }
+
+    override fun showMessage(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun updateFavoriteItem(position: Int, cat: Cat) {
+        adapter.replace(position, cat)
     }
 }

@@ -20,7 +20,7 @@ class CatsRepositoryImpl @Inject constructor(
     override fun removeFromFavorites(cat: Cat): Completable =
         Completable.complete()
 
-    override fun addToFavorites(cat: Cat): Completable =
+    override fun addToFavorites(id: String, url: String, favourite: Boolean): Completable =
         Completable.complete()
 
     override fun getFavorites(): Single<List<Cat>> =

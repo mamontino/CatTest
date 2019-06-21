@@ -47,7 +47,7 @@ class CatsFragment : BaseFragment(), CatsView {
 
     private val adapter: CatsAdapter =
         CatsAdapter(
-            { presenter.onFavoritesClicked(it) },
+            { position, cat -> presenter.onFavoritesClicked(position, cat) },
             { presenter.onImageClicked(it) }
         )
 
@@ -72,12 +72,11 @@ class CatsFragment : BaseFragment(), CatsView {
         catList.adapter = adapter
 
         scrollListener = EndlessScrollListener { presenter.loadMore() }
-
         catList.addOnScrollListener(scrollListener)
     }
 
-    override fun updateFavoriteItem(cat: Cat) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun updateFavoriteItem(position: Int, cat: Cat) {
+        adapter.replace(position, cat)
     }
 
     override fun addCats(cats: List<Cat>) {
@@ -111,19 +110,21 @@ class CatsFragment : BaseFragment(), CatsView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
-                PERMISSION_CODE -> { presenter.permissionGranted() }
+                PERMISSION_CODE -> {
+                    presenter.permissionGranted()
+                }
             }
         }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                presenter.permissionGranted()
-            } else {
-                Toast.makeText(context, "Permission denied", Toast.LENGTH_LONG).show()
-            }
-            return
+        if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+            presenter.permissionGranted()
+        } else {
+            Toast.makeText(context, "Permission denied", Toast.LENGTH_LONG).show()
         }
+        return
+    }
 
     override fun checkPermission(cat: Cat) {
         if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
