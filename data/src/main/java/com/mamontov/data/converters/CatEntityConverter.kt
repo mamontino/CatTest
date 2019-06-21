@@ -4,11 +4,8 @@ import com.mamontov.data.database.CatEntity
 import com.mamontov.domain.entities.Cat
 import javax.inject.Inject
 
-class CatEntityConverter @Inject constructor() : TwoSideConverter<Cat, CatEntity> {
+class CatEntityConverter @Inject constructor() : Converter<CatEntity, Cat> {
 
-    override fun convert(from: Cat): CatEntity =
-        CatEntity(from.id, from.url)
-
-    override fun revert(to: CatEntity): Cat =
-        Cat(to.id, to.url)
+    override fun convert(from: CatEntity): Cat =
+        Cat(from.id, from.url, favourite = true)
 }

@@ -6,13 +6,13 @@ import javax.inject.Inject
 
 interface AddToFavouritesUseCase {
 
-    operator fun invoke(id: String, url: String, favourite: Boolean): Completable
+    operator fun invoke(id: String, url: String): Completable
 }
 
 class AddToFavouritesUseCaseImpl @Inject constructor(
     private val catsRepository: CatsRepository
 ) : AddToFavouritesUseCase {
 
-    override fun invoke(id: String, url: String, favourite: Boolean): Completable =
-        catsRepository.addToFavorites(id, url, favourite)
+    override fun invoke(id: String, url: String): Completable =
+        catsRepository.addToFavorites(id, url)
 }

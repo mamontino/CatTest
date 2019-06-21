@@ -2,7 +2,6 @@ package com.mamontov.presentation.favorites
 
 import com.arellomobile.mvp.InjectViewState
 import com.mamontov.domain.entities.Cat
-import com.mamontov.domain.usecases.AddToFavouritesUseCase
 import com.mamontov.domain.usecases.GetFavoritesUseCase
 import com.mamontov.domain.usecases.RemoveFromFavouritesUseCase
 import com.mamontov.domain.usecases.SaveImageUseCase
@@ -12,27 +11,20 @@ import javax.inject.Inject
 
 @InjectViewState
 class FavoritesPresenter @Inject constructor(
-    private val getFavoritesUseCase: GetFavoritesUseCase,
-    private val removeFromFavouritesUseCase: RemoveFromFavouritesUseCase,
-    private val addToFavouritesUseCase: AddToFavouritesUseCase,
-    private val saveImageUseCase: SaveImageUseCase
+        private val getFavoritesUseCase: GetFavoritesUseCase,
+        private val removeFromFavouritesUseCase: RemoveFromFavouritesUseCase,
+        private val saveImageUseCase: SaveImageUseCase
 ) : BasePresenter<FavoritesView>() {
 
     private var cat: Cat? = null
 
-    override fun onFirstViewAttach() {
-        super.onFirstViewAttach()
-
+    fun getFavorites() {
         viewState.showLoading()
-        getFavorites()
-    }
-
-    private fun getFavorites() {
         compositeDisposable.add(
-            getFavoritesUseCase()
-                .doFinally(viewState::hideLoading)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::handleResponse, this::handleError)
+                getFavoritesUseCase()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doFinally(viewState::hideLoading)
+                        .subscribe(this::handleResponse, this::handleError)
         )
     }
 
@@ -50,40 +42,19 @@ class FavoritesPresenter @Inject constructor(
 
     fun onFavoritesClicked(position: Int, cat: Cat?) {
         cat?.let {
-            if (cat.favourite) {
-                addToFavourites(position, cat)
-            } else {
-                removeFromFavourites(position, cat)
-            }
+            removeFromFavourites(position, cat)
         }
     }
 
     private fun removeFromFavourites(position: Int, cat: Cat) {
-        val newCat = Cat(cat.id, cat.url, !cat.favourite)
         compositeDisposable.add(
-            removeFromFavouritesUseCase(newCat)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    { updateFavorites(position, newCat) },
-                    this::handleError
-                )
+                removeFromFavouritesUseCase(cat)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                { viewState.removeFavoriteItem(position) },
+                                this::handleError
+                        )
         )
-    }
-
-    private fun addToFavourites(position: Int, cat: Cat) {
-        val newCat = Cat(cat.id, cat.url, !cat.favourite)
-        compositeDisposable.add(
-            addToFavouritesUseCase(cat.id, cat.url, !cat.favourite)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    { updateFavorites(position, newCat) },
-                    this::handleError
-                )
-        )
-    }
-
-    private fun updateFavorites(position: Int, cat: Cat) {
-        viewState.updateFavoriteItem(position, cat)
     }
 
     fun onImageClicked(cat: Cat?) {

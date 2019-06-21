@@ -1,4 +1,8 @@
+import Application.versionCode
+import Application.versionName
 import com.android.build.gradle.AppPlugin
+import com.android.build.gradle.ProguardFiles.getDefaultProguardFile
+import org.gradle.internal.impldep.org.junit.experimental.categories.Categories.CategoryFilter.include
 import org.jetbrains.kotlin.gradle.plugin.KotlinAndroidPluginWrapper
 
 apply {
@@ -78,6 +82,8 @@ dependencies {
 
     implementation(Libraries.glide)
     kapt(Libraries.glideCompiler)
+
+//    implementation 'androidx.vectordrawable:vectordrawable:1.0.1'
 
     implementation(Libraries.roomRuntime)
 

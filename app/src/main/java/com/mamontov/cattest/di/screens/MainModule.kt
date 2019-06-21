@@ -40,7 +40,7 @@ interface MainModule {
 
     @Binds
     @AppScope
-    fun provideCatListConverter(converter: ListConverter<CatModel, Cat>): Converter<List<CatModel>, List<Cat>>
+    fun provideCatModelListConverter(converter: ListConverter<CatModel, Cat>): Converter<List<CatModel>, List<Cat>>
 
     @Binds
     @AppScope
@@ -48,5 +48,9 @@ interface MainModule {
 
     @Binds
     @AppScope
-    fun provideCatEntityConverter(converter: CatEntityConverter): Converter<Cat, CatEntity>
+    fun provideCatEntityListConverter(converter: ListConverter<CatEntity, Cat>): Converter<List<CatEntity>, List<Cat>>
+
+    @Binds
+    @AppScope
+    fun provideCatEntityConverter(converter: CatEntityConverter): Converter<CatEntity, Cat>
 }

@@ -128,7 +128,7 @@ class CatsFragment : BaseFragment(), CatsView {
 
     override fun checkPermission(cat: Cat) {
         if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            createDialog(R.string.storage_required) { openPermissionSettings() }
+            createDialog(R.string.storage_required) { _, _ ->  openPermissionSettings() }
         } else {
             requestStoragePermissions()
         }
@@ -142,7 +142,7 @@ class CatsFragment : BaseFragment(), CatsView {
     }
 
     override fun showError(message: String) {
-        createDialog(message) { openPermissionSettings() }
+        createDialog(message) { _, _ ->  Unit }
     }
 
     override fun showMessage(message: String) {

@@ -12,10 +12,10 @@ import javax.inject.Inject
 
 @InjectViewState
 class CatsPresenter @Inject constructor(
-    private val getCatsUseCase: GetCatsUseCase,
-    private val removeFromFavouritesUseCase: RemoveFromFavouritesUseCase,
-    private val addToFavouritesUseCase: AddToFavouritesUseCase,
-    private val saveImageUseCase: SaveImageUseCase
+        private val getCatsUseCase: GetCatsUseCase,
+        private val removeFromFavouritesUseCase: RemoveFromFavouritesUseCase,
+        private val addToFavouritesUseCase: AddToFavouritesUseCase,
+        private val saveImageUseCase: SaveImageUseCase
 ) : BasePresenter<CatsView>() {
 
     private var currentPage = 0
@@ -30,11 +30,11 @@ class CatsPresenter @Inject constructor(
 
     private fun loadCats(page: Int) {
         compositeDisposable.add(
-            getCatsUseCase(page)
-                .observeOn(AndroidSchedulers.mainThread())
-                .doFinally(viewState::hideLoading)
-                .doFinally(viewState::hideRefreshing)
-                .subscribe(this::handleResponse, this::handleError)
+                getCatsUseCase(page)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doFinally(viewState::hideLoading)
+                        .doFinally(viewState::hideRefreshing)
+                        .subscribe(this::handleResponse, this::handleError)
         )
     }
 
@@ -62,27 +62,26 @@ class CatsPresenter @Inject constructor(
     }
 
     private fun removeFromFavourites(position: Int, cat: Cat) {
-        val newCat = Cat(cat.id, cat.url, !cat.favourite)
+        val newCat = Cat(cat.id, cat.url)
         compositeDisposable.add(
-            removeFromFavouritesUseCase(newCat)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    { updateFavorites(position, newCat) },
-                    this::handleError
-                )
+                removeFromFavouritesUseCase(newCat)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                { updateFavorites(position, newCat) },
+                                this::handleError
+                        )
         )
     }
-
 
     private fun addToFavourites(position: Int, cat: Cat) {
         val newCat = Cat(cat.id, cat.url, !cat.favourite)
         compositeDisposable.add(
-            addToFavouritesUseCase(cat.id, cat.url, !cat.favourite)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    { updateFavorites(position, newCat) },
-                    this::handleError
-                )
+                addToFavouritesUseCase(cat.id, cat.url)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                { updateFavorites(position, newCat) },
+                                this::handleError
+                        )
         )
     }
 

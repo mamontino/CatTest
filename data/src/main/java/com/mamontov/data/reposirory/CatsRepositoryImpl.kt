@@ -8,23 +8,23 @@ import com.mamontov.domain.entities.Cat
 import com.mamontov.domain.reposirory.CatsRepository
 import io.reactivex.Completable
 import io.reactivex.Single
-import io.reactivex.rxkotlin.toSingle
 import javax.inject.Inject
 
 class CatsRepositoryImpl @Inject constructor(
     private val catsDataSource: CatsDataSource,
     private val catModelConverter: Converter<List<CatModel>, List<Cat>>,
-    private val catEntityConverter: Converter<Cat, CatEntity>
+    private val catEntityConverter: Converter<List<CatEntity>, List<Cat>>
 ) : CatsRepository {
 
     override fun removeFromFavorites(cat: Cat): Completable =
-        Completable.complete()
+        catsDataSource.removeFromFavorites(CatEntity(cat.id, cat.url))
 
-    override fun addToFavorites(id: String, url: String, favourite: Boolean): Completable =
-        Completable.complete()
+    override fun addToFavorites(id: String, url: String): Completable =
+        catsDataSource.addToFavorites(CatEntity(id, url))
 
     override fun getFavorites(): Single<List<Cat>> =
-        emptyList<Cat>().toSingle()
+        catsDataSource.getFavorites()
+            .map(catEntityConverter::convert)
 
     override fun getCats(page: Int?): Single<List<Cat>> =
         catsDataSource.getCats(page)

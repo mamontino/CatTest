@@ -7,12 +7,11 @@ import com.mamontov.domain.entities.Cat
 import timber.log.Timber
 
 class CatsAdapter(
-    private val onFavouriteClickListener: (position: Int, item: Cat?) -> Unit,
-    private val onImageClickListener: (item: Cat?) -> Unit
+        private val onFavouriteClickListener: (position: Int, item: Cat?) -> Unit,
+        private val onImageClickListener: (item: Cat?) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private companion object {
-        const val INCORRECT_INDEX = -1
         const val START_POSITION = 0
         const val CAT_ITEM = 0
     }
@@ -20,7 +19,7 @@ class CatsAdapter(
     private val cats: MutableList<Cat> = mutableListOf()
 
     override fun getItemCount(): Int =
-        cats.size
+            cats.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -42,22 +41,20 @@ class CatsAdapter(
     }
 
     fun replace(position: Int, cat: Cat) {
-        Timber.e("replace: $position")
-            cats[position] = cat
-            notifyItemChanged(position)
+        cats[position] = cat
+        notifyItemChanged(position)
     }
 
-    fun remove(item: Cat) {
-        val index = cats.indexOf(item)
-
-        if (index != INCORRECT_INDEX) {
-            cats.removeAt(index)
-            notifyItemRemoved(index)
-        }
+    fun remove(position: Int) {
+        Timber.e("remove: $position")
+        cats.removeAt(position)
+        notifyItemRemoved(position)
+        notifyItemRangeChanged(position, itemCount - position)
     }
 
     fun clear() {
         cats.clear()
         notifyItemRangeRemoved(cats.size, START_POSITION)
     }
+
 }

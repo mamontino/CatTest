@@ -1,5 +1,9 @@
 package com.mamontov.cattest.screens.favorites
 
+import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -11,6 +15,8 @@ import com.mamontov.cattest.R
 import com.mamontov.cattest.screens.BaseFragment
 import com.mamontov.cattest.screens.adapters.CatsAdapter
 import com.mamontov.cattest.screens.adapters.decorations.LinearItemDecoration
+import com.mamontov.cattest.screens.createDialog
+import com.mamontov.cattest.screens.openPermissionSettings
 import com.mamontov.cattest.screens.px
 import com.mamontov.domain.entities.Cat
 import com.mamontov.presentation.favorites.FavoritesPresenter
@@ -22,9 +28,10 @@ class FavoritesFragment : BaseFragment(), FavoritesView {
 
     companion object {
         fun newInstance(): FavoritesFragment =
-            FavoritesFragment()
+                FavoritesFragment()
 
         private const val ITEM_DIMEN = 16
+        private const val PERMISSION_CODE = 123
     }
 
     @Inject
@@ -35,16 +42,17 @@ class FavoritesFragment : BaseFragment(), FavoritesView {
     fun providePresenter() = presenter
 
     private val adapter: CatsAdapter =
-        CatsAdapter(
-            { position, cat -> presenter.onFavoritesClicked(position, cat) },
-            { presenter.onImageClicked(it) }
-        )
+            CatsAdapter(
+                    { position, cat -> presenter.onFavoritesClicked(position, cat) },
+                    { presenter.onImageClicked(it) }
+            )
 
     override val contentLayout: Int = R.layout.fragment_cat
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        presenter.getFavorites()
         setupViews()
     }
 
@@ -57,16 +65,19 @@ class FavoritesFragment : BaseFragment(), FavoritesView {
     }
 
     override fun addCats(cats: List<Cat>) {
+        adapter.clear()
         catList.visibility = View.VISIBLE
         emptyList.visibility = View.GONE
         adapter.addAll(cats)
     }
 
-    override fun removeFavoriteItem(cat: Cat) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun removeFavoriteItem(position: Int) {
+        adapter.remove(position)
     }
 
     override fun showLoading() {
+        catList.visibility = View.GONE
+        emptyList.visibility = View.GONE
         progress.visibility = View.VISIBLE
     }
 
@@ -80,19 +91,45 @@ class FavoritesFragment : BaseFragment(), FavoritesView {
         emptyList.visibility = View.VISIBLE
     }
 
-    override fun showError(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                PERMISSION_CODE -> {
+                    presenter.permissionGranted()
+                }
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+            presenter.permissionGranted()
+        } else {
+            Toast.makeText(context, "Permission denied", Toast.LENGTH_LONG).show()
+        }
+        return
     }
 
     override fun checkPermission(cat: Cat) {
-        Toast.makeText(requireContext(), cat.url, Toast.LENGTH_LONG).show()
+        if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            createDialog(R.string.storage_required) { _, _ ->  openPermissionSettings() }
+        } else {
+            requestStoragePermissions()
+        }
+    }
+
+    private fun requestStoragePermissions() {
+        requestPermissions(
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                PERMISSION_CODE
+        )
+    }
+
+    override fun showError(message: String) {
+        createDialog(message) { _, _ ->  openPermissionSettings() }
     }
 
     override fun showMessage(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
-    }
-
-    override fun updateFavoriteItem(position: Int, cat: Cat) {
-        adapter.replace(position, cat)
     }
 }

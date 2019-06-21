@@ -10,7 +10,7 @@ interface CatsRepository {
 
     fun removeFromFavorites(cat: Cat): Completable
 
-    fun addToFavorites(id: String, url: String, favourite: Boolean): Completable
+    fun addToFavorites(id: String, url: String): Completable
 
     fun getFavorites(): Single<List<Cat>>
 }

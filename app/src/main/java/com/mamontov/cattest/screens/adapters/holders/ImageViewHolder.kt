@@ -28,7 +28,7 @@ class ImageViewHolder(
         if (item.favourite){
             itemView.favourites.setImageResource(R.drawable.ic_favorite_red)
         }else{
-            itemView.favourites.setImageResource(R.drawable.ic_favorite_gray)
+            itemView.favourites.setImageResource(R.drawable.ic_favorite_white)
         }
 
         itemView.apply {

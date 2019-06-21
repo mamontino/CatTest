@@ -7,7 +7,6 @@ import com.google.gson.GsonBuilder
 import com.mamontov.cattest.BuildConfig
 import com.mamontov.cattest.di.AppScope
 import com.mamontov.data.network.ErrorHandler
-import com.mamontov.data.network.interceptors.HeaderInterceptor
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -80,6 +79,8 @@ class RetrofitModule {
             .client(okHttpClient)
             .build()
 
+//    Выпилил HeaderInterceptor, так как при авторизации запрашивает теже картинки
+
     private fun createHttpClient(): OkHttpClient {
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BODY
@@ -87,7 +88,7 @@ class RetrofitModule {
         val builder = OkHttpClient.Builder()
             .addInterceptor(logging)
             .addInterceptor(StethoInterceptor())
-            .addInterceptor(HeaderInterceptor())
+//            .addInterceptor(HeaderInterceptor())
             .connectTimeout(TIMEOUT_CONNECT_SEC, TimeUnit.SECONDS)
             .readTimeout(TIMEOUT_READ_SEC, TimeUnit.SECONDS)
             .writeTimeout(TIMEOUT_WRITE_SEC, TimeUnit.SECONDS)

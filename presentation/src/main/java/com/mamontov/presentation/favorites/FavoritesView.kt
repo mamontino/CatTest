@@ -10,7 +10,7 @@ interface FavoritesView : MvpView {
 
     fun addCats(cats: List<Cat>)
 
-    fun removeFavoriteItem(cat: Cat)
+    fun removeFavoriteItem(position: Int)
 
     fun showLoading()
 
@@ -23,6 +23,4 @@ interface FavoritesView : MvpView {
     fun checkPermission(cat: Cat)
 
     fun showMessage(message: String)
-
-    fun updateFavoriteItem(position: Int, cat: Cat)
 }

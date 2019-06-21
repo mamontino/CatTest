@@ -6,6 +6,9 @@
 
     <string name="empty_list">Empty</string>
     <string name="empty_list_favorites">Empty</string>
+
     <string name="ok">OK</string>
     <string name="storage_required">Permission to write to storage is required</string>
+    <string name="title_home">Home</string>
+    <string name="title_favourites">Favourites</string>
 </resources>
