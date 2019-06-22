@@ -9,7 +9,7 @@ import dagger.Reusable
 interface FavoritesFragmentModule{
 
     @Binds
-    fun bindGetFavoritesUseCase(useCase: GetFavoritesUseCaseImpl): GetFavoritesUseCase
+    fun bindGetFavoritesUseCase(useCase: GetFavouritesUseCaseImpl): GetFavouritesUseCase
 
     @Binds
     @Reusable

@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.mamontov.cattest.R
 import com.mamontov.cattest.screens.cats.CatsFragment
-import com.mamontov.cattest.screens.favorites.FavoritesFragment
+import com.mamontov.cattest.screens.favorites.FavouritesFragment
 
 class SectionsPagerAdapter(val context: Context, manager: FragmentManager) : FragmentStatePagerAdapter(manager) {
 
@@ -20,7 +20,7 @@ class SectionsPagerAdapter(val context: Context, manager: FragmentManager) : Fra
         if (position == 0) {
             CatsFragment.newInstance()
         } else {
-            FavoritesFragment.newInstance()
+            FavouritesFragment.newInstance()
         }
 
     override fun getPageTitle(position: Int): CharSequence {

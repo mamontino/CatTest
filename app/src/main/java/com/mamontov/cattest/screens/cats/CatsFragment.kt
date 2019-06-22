@@ -16,9 +16,9 @@ import com.mamontov.cattest.screens.BaseFragment
 import com.mamontov.cattest.screens.adapters.CatsAdapter
 import com.mamontov.cattest.screens.adapters.EndlessScrollListener
 import com.mamontov.cattest.screens.adapters.decorations.GridItemDecoration
-import com.mamontov.cattest.screens.createDialog
 import com.mamontov.cattest.screens.openPermissionSettings
 import com.mamontov.cattest.screens.px
+import com.mamontov.cattest.screens.showOkFragmentDialog
 import com.mamontov.domain.entities.Cat
 import com.mamontov.presentation.cats.CatsPresenter
 import com.mamontov.presentation.cats.CatsView
@@ -29,11 +29,13 @@ class CatsFragment : BaseFragment(), CatsView {
 
     companion object {
         fun newInstance(): CatsFragment =
-            CatsFragment()
+                CatsFragment()
 
         private const val ITEM_DIMEN = 16
         private const val SPAN_COUNT = 2
         private const val PERMISSION_CODE = 123
+        private const val ERROR_CODE = 124
+        private const val IMAGE_CODE = 125
     }
 
     @Inject
@@ -46,10 +48,10 @@ class CatsFragment : BaseFragment(), CatsView {
     private lateinit var scrollListener: EndlessScrollListener
 
     private val adapter: CatsAdapter =
-        CatsAdapter(
-            { position, cat -> presenter.onFavoritesClicked(position, cat) },
-            { presenter.onImageClicked(it) }
-        )
+            CatsAdapter(
+                    { position, cat -> presenter.onFavoritesClicked(position, cat) },
+                    { presenter.onImageClicked(it) }
+            )
 
     override val contentLayout: Int = R.layout.fragment_cat
 
@@ -64,10 +66,10 @@ class CatsFragment : BaseFragment(), CatsView {
         swipeContainer.setOnRefreshListener { presenter.refreshCats() }
         catList.layoutManager = GridLayoutManager(requireContext(), SPAN_COUNT, RecyclerView.VERTICAL, false)
         catList.addItemDecoration(
-            GridItemDecoration(
-                spacing = ITEM_DIMEN.px,
-                spanCount = SPAN_COUNT
-            )
+                GridItemDecoration(
+                        spacing = ITEM_DIMEN.px,
+                        spanCount = SPAN_COUNT
+                )
         )
         catList.adapter = adapter
 
@@ -121,31 +123,47 @@ class CatsFragment : BaseFragment(), CatsView {
         if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
             presenter.permissionGranted()
         } else {
-            Toast.makeText(context, "Permission denied", Toast.LENGTH_LONG).show()
+            showMessage("Permission denied")
         }
         return
     }
 
-    override fun checkPermission(cat: Cat) {
+    private fun checkPermission() {
         if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            createDialog(R.string.storage_required) { _, _ ->  openPermissionSettings() }
+            showOkFragmentDialog(
+                    message = getString(R.string.storage_required),
+                    requestCode = PERMISSION_CODE
+            )
         } else {
             requestStoragePermissions()
         }
     }
 
+    override fun onPositiveButtonClick(requestCode: Int, data: Bundle?) {
+        super.onPositiveButtonClick(requestCode, data)
+        when (requestCode) {
+            PERMISSION_CODE -> openPermissionSettings()
+            ERROR_CODE -> showEmptyCats()
+            IMAGE_CODE -> checkPermission()
+        }
+    }
+
     private fun requestStoragePermissions() {
         requestPermissions(
-            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-            PERMISSION_CODE
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                PERMISSION_CODE
         )
     }
 
     override fun showError(message: String) {
-        createDialog(message) { _, _ ->  Unit }
+        showOkFragmentDialog(message = message, requestCode = ERROR_CODE)
     }
 
     override fun showMessage(message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun imageClicked() {
+        showOkFragmentDialog(message = getString(R.string.save_image), requestCode = IMAGE_CODE)
     }
 }

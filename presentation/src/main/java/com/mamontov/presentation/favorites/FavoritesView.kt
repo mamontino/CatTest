@@ -20,7 +20,9 @@ interface FavoritesView : MvpView {
 
     fun showError(message: String)
 
-    fun checkPermission(cat: Cat)
+//    fun checkPermission(cat: Cat)
 
     fun showMessage(message: String)
+
+    fun imageClicked()
 }

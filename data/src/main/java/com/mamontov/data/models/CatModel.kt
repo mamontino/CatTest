@@ -9,10 +9,6 @@ data class CatModel(
     val height: Int
 )
 
-//CatModel.toCat(){
-//
-//}
-
 data class Breed(
     val weight: Weight?,
     val id: String?,

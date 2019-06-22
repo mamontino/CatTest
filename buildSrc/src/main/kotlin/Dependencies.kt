@@ -126,6 +126,7 @@ object SupportLibraries {
 
 object TestLibraries {
 	val mockitoAndroid = "org.mockito:mockito-android:${Versions.androidMockito}"
+	val mockitoInline = "org.mockito:mockito-inline:${Versions.androidMockito}"
 	val junit = "junit:junit:${Versions.junit}"
 	val junitExt = "androidx.test.ext:junit:${Versions.junitExtVersion}"
 	val kotlinMockito = "com.nhaarman:mockito-kotlin-kt1.1:${Versions.kotlinMockito}"

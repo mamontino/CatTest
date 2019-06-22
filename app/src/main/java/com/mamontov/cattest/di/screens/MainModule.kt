@@ -6,10 +6,7 @@ import com.mamontov.data.converters.CatModelConverter
 import com.mamontov.data.converters.Converter
 import com.mamontov.data.converters.ListConverter
 import com.mamontov.data.database.CatEntity
-import com.mamontov.data.datasources.CatsDataSource
-import com.mamontov.data.datasources.CatsDataSourceImpl
-import com.mamontov.data.datasources.ImageDataSource
-import com.mamontov.data.datasources.ImageDataSourceImpl
+import com.mamontov.data.datasources.*
 import com.mamontov.data.models.CatModel
 import com.mamontov.data.reposirory.CatsRepositoryImpl
 import com.mamontov.data.reposirory.ImageRepositoryImpl
@@ -32,7 +29,11 @@ interface MainModule {
 
     @Binds
     @AppScope
-    fun bindCatsDataSource(dataSource: CatsDataSourceImpl): CatsDataSource
+    fun bindCatsRemoteDataSource(dataSource: CatsRemoteDataSourceImpl): CatsRemoteDataSource
+
+    @Binds
+    @AppScope
+    fun bindCatsLocalDataSource(dataSource: CatsLocalDataSourceImpl): CatsLocalDataSource
 
     @Binds
     @AppScope

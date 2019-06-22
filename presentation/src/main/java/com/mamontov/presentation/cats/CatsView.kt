@@ -29,8 +29,7 @@ interface CatsView : MvpView {
 
     fun hideRefreshing()
 
-    @StateStrategyType(OneExecutionStateStrategy::class)
-    fun checkPermission(cat: Cat)
-
     fun showMessage(message: String)
+
+    fun imageClicked()
 }

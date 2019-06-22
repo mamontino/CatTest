@@ -2,7 +2,7 @@ package com.mamontov.cattest.di.screens
 
 import com.mamontov.cattest.di.FragmentScope
 import com.mamontov.cattest.screens.cats.CatsFragment
-import com.mamontov.cattest.screens.favorites.FavoritesFragment
+import com.mamontov.cattest.screens.favorites.FavouritesFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -15,5 +15,5 @@ interface MainActivityModule {
 
     @FragmentScope
     @ContributesAndroidInjector(modules = [FavoritesFragmentModule::class])
-    fun provideFavotitesFragment(): FavoritesFragment
+    fun provideFavotitesFragment(): FavouritesFragment
 }

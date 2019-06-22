@@ -15,23 +15,25 @@ import com.mamontov.cattest.R
 import com.mamontov.cattest.screens.BaseFragment
 import com.mamontov.cattest.screens.adapters.CatsAdapter
 import com.mamontov.cattest.screens.adapters.decorations.LinearItemDecoration
-import com.mamontov.cattest.screens.createDialog
 import com.mamontov.cattest.screens.openPermissionSettings
 import com.mamontov.cattest.screens.px
+import com.mamontov.cattest.screens.showOkFragmentDialog
 import com.mamontov.domain.entities.Cat
 import com.mamontov.presentation.favorites.FavoritesPresenter
 import com.mamontov.presentation.favorites.FavoritesView
 import kotlinx.android.synthetic.main.fragment_cat.*
 import javax.inject.Inject
 
-class FavoritesFragment : BaseFragment(), FavoritesView {
+class FavouritesFragment : BaseFragment(), FavoritesView {
 
     companion object {
-        fun newInstance(): FavoritesFragment =
-                FavoritesFragment()
+        fun newInstance(): FavouritesFragment =
+                FavouritesFragment()
 
         private const val ITEM_DIMEN = 16
         private const val PERMISSION_CODE = 123
+        private const val ERROR_CODE = 124
+        private const val IMAGE_CODE = 125
     }
 
     @Inject
@@ -105,16 +107,28 @@ class FavoritesFragment : BaseFragment(), FavoritesView {
         if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
             presenter.permissionGranted()
         } else {
-            Toast.makeText(context, "Permission denied", Toast.LENGTH_LONG).show()
+            showMessage("Permission denied")
         }
         return
     }
 
-    override fun checkPermission(cat: Cat) {
+    private fun checkPermission() {
         if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            createDialog(R.string.storage_required) { _, _ ->  openPermissionSettings() }
+            showOkFragmentDialog(
+                    message = getString(R.string.storage_required),
+                    requestCode = PERMISSION_CODE
+            )
         } else {
             requestStoragePermissions()
+        }
+    }
+
+    override fun onPositiveButtonClick(requestCode: Int, data: Bundle?) {
+        super.onPositiveButtonClick(requestCode, data)
+        when (requestCode) {
+            PERMISSION_CODE -> openPermissionSettings()
+            ERROR_CODE -> showEmptyCats()
+            IMAGE_CODE -> checkPermission()
         }
     }
 
@@ -126,10 +140,14 @@ class FavoritesFragment : BaseFragment(), FavoritesView {
     }
 
     override fun showError(message: String) {
-        createDialog(message) { _, _ ->  openPermissionSettings() }
+        showOkFragmentDialog(message = message, requestCode = ERROR_CODE)
     }
 
     override fun showMessage(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun imageClicked() {
+        showOkFragmentDialog(message = getString(R.string.save_image), requestCode = IMAGE_CODE)
     }
 }

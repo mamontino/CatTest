@@ -102,7 +102,7 @@ class CatsPresenter @Inject constructor(
     fun onImageClicked(cat: Cat?) {
         cat?.let {
             this.cat = cat
-            viewState.checkPermission(cat)
+            viewState.imageClicked()
         }
     }
 
@@ -119,5 +119,9 @@ class CatsPresenter @Inject constructor(
         }
         viewState.showMessage("Loading...")
         cat = null
+    }
+
+    fun onEmpty() {
+       viewState.showEmptyCats()
     }
 }

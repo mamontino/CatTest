@@ -11,4 +11,5 @@
     <string name="storage_required">Permission to write to storage is required</string>
     <string name="title_home">Home</string>
     <string name="title_favourites">Favourites</string>
+    <string name="save_image">Save image?</string>
 </resources>

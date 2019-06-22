@@ -4,7 +4,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mamontov.cattest.screens.adapters.holders.ImageViewHolder
 import com.mamontov.domain.entities.Cat
-import timber.log.Timber
 
 class CatsAdapter(
         private val onFavouriteClickListener: (position: Int, item: Cat?) -> Unit,
@@ -46,7 +45,6 @@ class CatsAdapter(
     }
 
     fun remove(position: Int) {
-        Timber.e("remove: $position")
         cats.removeAt(position)
         notifyItemRemoved(position)
         notifyItemRangeChanged(position, itemCount - position)

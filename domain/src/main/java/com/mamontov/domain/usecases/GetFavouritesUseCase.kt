@@ -5,14 +5,14 @@ import com.mamontov.domain.reposirory.CatsRepository
 import io.reactivex.Single
 import javax.inject.Inject
 
-interface GetFavoritesUseCase {
+interface GetFavouritesUseCase {
 
     operator fun invoke(): Single<List<Cat>>
 }
 
-class GetFavoritesUseCaseImpl @Inject constructor(
+class GetFavouritesUseCaseImpl @Inject constructor(
     private val catsRepository: CatsRepository
-) : GetFavoritesUseCase {
+) : GetFavouritesUseCase {
 
     override fun invoke(): Single<List<Cat>> =
         catsRepository.getFavorites()

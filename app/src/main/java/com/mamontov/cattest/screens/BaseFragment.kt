@@ -11,33 +11,17 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.HasSupportFragmentInjector
-import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 abstract class BaseFragment : MvpAppCompatFragment(), HasSupportFragmentInjector {
 
-    protected val disposable = CompositeDisposable()
-
     abstract val contentLayout: Int
-
-    private val baseActivity: BaseActivity?
-        get() = activity as? BaseActivity
 
     @Inject
     lateinit var childFragmentInjector: DispatchingAndroidInjector<Fragment>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         inflater.inflate(contentLayout, container, false)
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        disposable.clear()
-    }
-
-    override fun onDestroyView() {
-        disposable.clear()
-        super.onDestroyView()
-    }
 
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
@@ -48,4 +32,6 @@ abstract class BaseFragment : MvpAppCompatFragment(), HasSupportFragmentInjector
         AndroidInjector {
             childFragmentInjector.maybeInject(it)
         }
+
+    open fun onPositiveButtonClick(requestCode: Int, data: Bundle?) = Unit
 }

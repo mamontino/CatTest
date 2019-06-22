@@ -2,16 +2,17 @@ package com.mamontov.presentation.favorites
 
 import com.arellomobile.mvp.InjectViewState
 import com.mamontov.domain.entities.Cat
-import com.mamontov.domain.usecases.GetFavoritesUseCase
+import com.mamontov.domain.usecases.GetFavouritesUseCase
 import com.mamontov.domain.usecases.RemoveFromFavouritesUseCase
 import com.mamontov.domain.usecases.SaveImageUseCase
 import com.mamontov.presentation.BasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
+import timber.log.Timber
 import javax.inject.Inject
 
 @InjectViewState
 class FavoritesPresenter @Inject constructor(
-        private val getFavoritesUseCase: GetFavoritesUseCase,
+        private val getFavouritesUseCase: GetFavouritesUseCase,
         private val removeFromFavouritesUseCase: RemoveFromFavouritesUseCase,
         private val saveImageUseCase: SaveImageUseCase
 ) : BasePresenter<FavoritesView>() {
@@ -21,7 +22,7 @@ class FavoritesPresenter @Inject constructor(
     fun getFavorites() {
         viewState.showLoading()
         compositeDisposable.add(
-                getFavoritesUseCase()
+                getFavouritesUseCase()
                         .observeOn(AndroidSchedulers.mainThread())
                         .doFinally(viewState::hideLoading)
                         .subscribe(this::handleResponse, this::handleError)
@@ -60,7 +61,7 @@ class FavoritesPresenter @Inject constructor(
     fun onImageClicked(cat: Cat?) {
         cat?.let {
             this.cat = cat
-            viewState.checkPermission(cat)
+            viewState.imageClicked()
         }
     }
 
@@ -76,5 +77,10 @@ class FavoritesPresenter @Inject constructor(
         }
         viewState.showMessage("Loading...")
         cat = null
+    }
+
+    fun onEmpty() {
+        Timber.e("onEmpty")
+        viewState.showEmptyCats()
     }
 }
