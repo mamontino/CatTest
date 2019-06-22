@@ -124,9 +124,6 @@ class ErrorDialogFragment : AppCompatDialogFragment() {
         var title: String? = null
             private set
 
-        var iconUrl: String? = null
-            private set
-
         var cancelable: Boolean = true
             private set
 
@@ -143,7 +140,7 @@ class ErrorDialogFragment : AppCompatDialogFragment() {
                 apply { returnBundle = bundle }
 
         fun build(): ErrorDialogFragment =
-                ErrorDialogFragment.newInstance(
+                newInstance(
                         title,
                         message,
                         positiveButtonText,
